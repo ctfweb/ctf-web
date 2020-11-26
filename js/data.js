@@ -32,6 +32,21 @@ function populateCardList(itemArgsList, creator) {
     });
 }
 
+function scrollToCard(index) {
+    let cards = document.getElementById('content-list-group').getElementsByClassName('card');
+    if (cards.length > index) {
+        cards[index].scrollIntoView();
+    }
+}
+
+function highlightCard(index) {
+    let cards = document.getElementById('content-list-group').getElementsByClassName('card');
+    if (cards.length > index) {
+        cards[index].className += ' highlighted';
+    }
+}
+
+
 function updateScheduleForDate(data) {
     date = $("#datepicker").attr("value");
     selectedIndices = filterJsonData(data, 'date', date);
@@ -44,7 +59,13 @@ function updateLabInfoForDate(data) {
     selectedIndices = [...Array(data['date'].length).keys()];
     // TODO: Scroll to closest next date
     selectedVals = selectJsonData(data, selectedIndices, ['date', 'time','name']);
+    scrollIndex = 0;
+    while (compareDateStrings(selectedVals[scrollIndex][0], date)) {
+        scrollIndex += 1;
+    }
     populateCardList(selectedVals, createLabItem);
+    scrollToCard(scrollIndex);
+    highlightCard(scrollIndex);
 }
 
 function updateCourseInfo(data) {
