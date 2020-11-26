@@ -198,6 +198,8 @@
         <script type="text/javascript">
             $(document).ready(function () {
 
+                var dataJson = null;
+                var itemType = ''
                 let today = getDateFormatted(new Date(), '.');
                 $("#datepicker").attr("value", today);
 
@@ -205,9 +207,18 @@
                     language: "tr",
                     format: "dd.mm.yyyy",
                     todayBtn: true,
+                    autoclose: true,
                     todayHighlight: true,
                     defaultViewDate: today
-                })
+                }).on("changeDate", function(e) {
+                        // `e` here contains the extra attributes
+                        if (itemType == 'schedule' || itemType == 'labInfo') {
+                            let selectedDate = getDateFormatted(e.date, '.');
+                            console.log(selectedDate);
+                            $("#datepicker").attr("value", selectedDate);
+                            updateUI(dataJson, itemType);
+                        } 
+                });
 
 
                 $('#sidebarCollapse').on('click', function () {
@@ -215,7 +226,6 @@
                     $(this).toggleClass('active');
                 });
 
-                var dataJson = null;
                 
 
                 $("#sidebar ul li div").on('click', function() {
@@ -229,7 +239,6 @@
                         });
                     }
                 })
-                var itemType = ''
             
 
                 function updateList(itemType) {
