@@ -177,6 +177,10 @@ a.article, a.article:hover {
     -webkit-overflow-scrolling: touch;
 }
 
+.card.highlighted {
+    background-color: lightblue;
+}
+
 #sidebarCollapse {
     width: 40px;
     height: 40px;
