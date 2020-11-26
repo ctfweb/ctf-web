@@ -57,7 +57,6 @@ function updateScheduleForDate(data) {
 function updateLabInfoForDate(data) {
     date = $("#datepicker").attr("value");
     selectedIndices = [...Array(data['date'].length).keys()];
-    // TODO: Scroll to closest next date
     selectedVals = selectJsonData(data, selectedIndices, ['date', 'time','name']);
     scrollIndex = 0;
     while (compareDateStrings(selectedVals[scrollIndex][0], date)) {
