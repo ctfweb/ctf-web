@@ -101,7 +101,7 @@ a, a:hover, a:focus {
     display: block;
 }
 
-#sidebar ul li div:hover {
+#sidebar ul li div:hover:not(#settingsContainer) {
     color:#500016;
     background: #fff;
 }
