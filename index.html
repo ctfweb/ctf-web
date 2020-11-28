@@ -61,6 +61,7 @@
                         <span>Pratikler</span>
                     </div>
                 </li>
+                <!-- TODO: Implement food menu-->
                 <!-- <li>
                     <div value="foodMenu">
                         <i class="fas fa-utensils"></i>
@@ -75,69 +76,7 @@
                     </a>
                     <ul class="collapse list-unstyled" id="settingsSubmenu">
                         <li>
-                            <div class="container-fluid center">
-                                <div>Sınıf</div>
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-light active">
-                                        <input type="radio" name="options" id="option1" checked> 1
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option2"> 2
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option3"> 3
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option4"> 4
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option5"> 5
-                                    </label>
-                                </div>
-
-                                <div>Amfi</div>
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-light active">
-                                        <input type="radio" name="options" id="option1" checked> 1
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option2"> 2
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option3"> En 1
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option4"> En 2
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option5"> En 3
-                                    </label>
-                                </div>
-
-                                <div>Grup</div>
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-light active">
-                                        <input type="radio" name="options" id="option1" checked> 1
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option2"> 2
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option3"> 3
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option4"> 4
-                                    </label>
-                                </div>
-                                <div>Alt Grup</div>
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option1"> A
-                                    </label>
-                                    <label class="btn btn-light">
-                                        <input type="radio" name="options" id="option2"> B
-                                    </label>
-                                </div>
+                            <div class="container-fluid center" id="settingsContainer">
                             </div>
                         </li>
                     </ul>
@@ -170,6 +109,7 @@
 
             <div id='list-container'>
                 <ul class="list-group" id="content-list-group">
+                    <!-- TODO: Add empty view -->
                 </ul>
             </div>
         </div>
@@ -194,12 +134,22 @@
         <script src="js/utils.js" charset="UTF-8"></script>
         <script src="js/data.js" charset="UTF-8"></script>
         <script src="js/listutils.js" charset="UTF-8"></script>
+        <script src="js/cookie.js" charset="UTF-8"></script>
 
         <script type="text/javascript">
             $(document).ready(function () {
 
                 var dataJson = null;
-                var itemType = ''
+                var itemType = 'courseInfo';
+
+                function updateDataAndUI(json) {
+                    if (typeof itemType === 'undefined') {
+                        itemType = 'courseInfo';
+                    }
+                    dataJson = json;
+                    updateUI(dataJson, itemType);
+                }
+
                 let today = getDateFormatted(new Date(), '.');
                 $("#datepicker").attr("value", today);
 
@@ -219,6 +169,69 @@
                             updateUI(dataJson, itemType);
                         } 
                 });
+                
+                
+                $.getJSON(getResourceUrl(itemType), updateDataAndUI);
+
+                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Sınıf'))
+                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3"], "grade", getCookie("grade")));
+                $('#grade label').click(function() {
+                    $(this).addClass('active').siblings().removeClass('active');
+                    setCookie("grade", $(this).attr("value"));
+                    itemType = "courseInfo";
+                    let resUrl = getResourceUrl(itemType);
+                    console.log("Grade changed", resUrl, itemType);
+                    $.getJSON(resUrl, updateDataAndUI);
+                });
+
+                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Amfi'))
+                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "EN1"], "class", getCookie("class")));
+                $('#class label').click(function() {
+                    $(this).addClass('active').siblings().removeClass('active');
+                    setCookie("class", $(this).attr("value"));
+                    itemType = "courseInfo";
+                    let resUrl = getResourceUrl(itemType);
+                    console.log("Class changed", resUrl, itemType);
+                    $.getJSON(resUrl, updateDataAndUI);
+                });
+
+                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Grup'))
+                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["TRA", "TRB", "EN"], "customGroup", getCookie("group").replace(/TR\d/, "TR")));
+                $('#customGroup label').click(function() {
+                    $(this).addClass('active').siblings().removeClass('active');
+                    let newGroup = $(this).attr("value").replace("TR", "TR" + getCookie("grade"));
+                    console.log("New group", newGroup)
+                    setCookie("group", newGroup);
+                    $('#subGroup label').removeClass("active");
+                    $('#group label').removeClass("active");
+                    setCookie("subGroup", "");
+                    itemType = "courseInfo";
+                    let resUrl = getResourceUrl(itemType);
+                    console.log("Group changed", resUrl, itemType);
+                    $.getJSON(resUrl, updateDataAndUI);
+                });
+                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3", "4"], "group", getCookie("group")));
+                $('#group label').click(function() {
+                    $(this).addClass('active').siblings().removeClass('active');
+                    $('#customGroup label').removeClass("active");
+                    setCookie("group", $(this).attr("value"));
+                    itemType = "courseInfo";
+                    let resUrl = getResourceUrl(itemType);
+                    console.log("Group changed", resUrl, itemType);
+                    $.getJSON(resUrl, updateDataAndUI);
+                });
+
+                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Alt Grup'))
+                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["A", "B"], "subGroup", getCookie("subGroup")));
+                $('#subGroup label').click(function() {
+                    $(this).addClass('active').siblings().removeClass('active');
+                    $('#customGroup label').removeClass("active");
+                    setCookie("subGroup", $(this).attr("value"));
+                    itemType = "courseInfo";
+                    let resUrl = getResourceUrl(itemType);
+                    console.log("Subgroup changed", resUrl, itemType);
+                    $.getJSON(resUrl, updateDataAndUI);
+                });
 
 
                 $('#sidebarCollapse').on('click', function () {
@@ -233,10 +246,7 @@
                     if (itemType != clickedType) {
                         itemType = clickedType;
                         let resUrl = getResourceUrl(itemType);
-                        $.getJSON(resUrl, function (json) {
-                            dataJson = json;
-                            updateUI(dataJson, itemType);
-                        });
+                        $.getJSON(resUrl, updateDataAndUI);
                     }
                 })
             

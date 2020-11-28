@@ -78,3 +78,19 @@ function createCourseInfoItem(code, credit, start, end, midterms, final, makeup)
     card.appendChild(cardBody);
     return card;   
 }
+
+function createToggleButtonGroup(options, id, selected) {
+    var group = createElement('div', 'btn-group btn-group-toggle', '');
+    group.setAttribute('id', id)
+    group.setAttribute("data-toggle", "buttons");
+    options.forEach((option) => {
+        var label = createElement('label', 'btn btn-light' + (option == selected ? ' active' : ''), option);
+        label.setAttribute("value", option);
+        var input = createElement('input', '', '');
+        input.setAttribute("type", "radio");
+        input.setAttribute("name", "options");
+        label.appendChild(input);
+        group.appendChild(label);
+    });
+    return group;
+}
