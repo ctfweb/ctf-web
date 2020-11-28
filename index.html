@@ -160,22 +160,22 @@
                     autoclose: true,
                     todayHighlight: true,
                     defaultViewDate: today
-                }).on("changeDate", function(e) {
-                        // `e` here contains the extra attributes
-                        if (itemType == 'schedule' || itemType == 'labInfo') {
-                            let selectedDate = getDateFormatted(e.date, '.');
-                            console.log(selectedDate);
-                            $("#datepicker").attr("value", selectedDate);
-                            updateUI(dataJson, itemType);
-                        } 
+                }).on("changeDate", function (e) {
+                    // `e` here contains the extra attributes
+                    if (itemType == 'schedule' || itemType == 'labInfo') {
+                        let selectedDate = getDateFormatted(e.date, '.');
+                        console.log(selectedDate);
+                        $("#datepicker").attr("value", selectedDate);
+                        updateUI(dataJson, itemType);
+                    }
                 });
-                
-                
+
+
                 $.getJSON(getResourceUrl(itemType), updateDataAndUI);
 
                 document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Sınıf'))
                 document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3"], "grade", getCookie("grade")));
-                $('#grade label').click(function() {
+                $('#grade label').click(function () {
                     $(this).addClass('active').siblings().removeClass('active');
                     setCookie("grade", $(this).attr("value"));
                     itemType = "courseInfo";
@@ -186,7 +186,7 @@
 
                 document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Amfi'))
                 document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "EN1"], "class", getCookie("class")));
-                $('#class label').click(function() {
+                $('#class label').click(function () {
                     $(this).addClass('active').siblings().removeClass('active');
                     setCookie("class", $(this).attr("value"));
                     itemType = "courseInfo";
@@ -197,7 +197,7 @@
 
                 document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Grup'))
                 document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["TRA", "TRB", "EN"], "customGroup", getCookie("group").replace(/TR\d/, "TR")));
-                $('#customGroup label').click(function() {
+                $('#customGroup label').click(function () {
                     $(this).addClass('active').siblings().removeClass('active');
                     let newGroup = $(this).attr("value").replace("TR", "TR" + getCookie("grade"));
                     console.log("New group", newGroup)
@@ -211,7 +211,7 @@
                     $.getJSON(resUrl, updateDataAndUI);
                 });
                 document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3", "4"], "group", getCookie("group")));
-                $('#group label').click(function() {
+                $('#group label').click(function () {
                     $(this).addClass('active').siblings().removeClass('active');
                     $('#customGroup label').removeClass("active");
                     setCookie("group", $(this).attr("value"));
@@ -223,7 +223,7 @@
 
                 document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Alt Grup'))
                 document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["A", "B"], "subGroup", getCookie("subGroup")));
-                $('#subGroup label').click(function() {
+                $('#subGroup label').click(function () {
                     $(this).addClass('active').siblings().removeClass('active');
                     $('#customGroup label').removeClass("active");
                     setCookie("subGroup", $(this).attr("value"));
@@ -239,42 +239,20 @@
                     $(this).toggleClass('active');
                 });
 
-                
 
-                $("#sidebar ul li div").on('click', function() {
+
+                $("#sidebar ul li div").on('click', function () {
                     let clickedType = $(this).attr('value');
                     if (itemType != clickedType) {
                         itemType = clickedType;
                         let resUrl = getResourceUrl(itemType);
                         $.getJSON(resUrl, updateDataAndUI);
+                        if (window.innerWidth < 768) {
+                            $('#sidebar').toggleClass('active');
+                            $('#sidebarCollapse').toggleClass('active');
+                        }
                     }
                 })
-            
-
-                function updateList(itemType) {
-                    var listGroup = document.getElementById('content-list-group');
-                listGroup.textContent = ''
-                for (var i = 0; i < 4; i++) {
-                    switch (itemType) {
-                        case "schedule":
-                            listGroup.appendChild(createScheduleItem('09:00', "Tıbbi Biyoloji", "Hücre ve Hücre Araştırmalarına Genel Bakış", "Prof. Dr. İlhan Onaran"));
-                            break;
-                        case "foodMenu":
-                            listGroup.appendChild(createFoodItem('Öğle', ["Çoban Kavurma", "Erişte", "Yoğurt"]));
-                            break;
-                        case "labInfo":
-                            listGroup.appendChild(createLabItem("09.11.2020", "14:30", "Biyofizik"));
-                            break;
-                        case "courseInfo":
-                            listGroup.appendChild(createCourseInfoItem('CTFT1002 / CTFI1002', 13, "03.11.2020",
-                                " 24.12.2020", ["24.12.2020 11:00", "24.12.2020 11:00"], "22.01.2021 11:00", "22.01.2021 11:00"));
-                            break;
-                        default:
-                        // code block
-                    }
-                }
-                }
-                
             });
 
         // TODO: Add click outside sidebar to collapse
