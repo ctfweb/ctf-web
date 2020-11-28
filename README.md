@@ -1,4 +1,3 @@
-TODO : https://bootstrapious.com/p/bootstrap-sidebar#media-queries
+# Cerrah Site
 
-https://github.com/uxsolutions/bootstrap-datepicker
-https://bootstrapious.com/p/bootstrap-datepicker
+This is simple website built for Istanbul University Cerrahpaşa students. The plan is hosting it on github simply.
