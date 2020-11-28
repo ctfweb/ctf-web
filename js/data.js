@@ -21,7 +21,13 @@ function selectJsonData(json, selectedIndices, selectedKeys) {
 }
 
 function getResourceUrl(itemType) {
-    return "res/" + itemType + '.json' // TODO: Implement grade and group logic 
+    if (itemType == 'schedule') {
+        return "res/grade" + getCookie("grade") + "/" + itemType + getCookie("class") +'.json'
+    } else if (itemType == 'labInfo') {
+        return "res/grade" + getCookie("grade") + "/" + itemType + getCookie("group") + getCookie("subGroup") + '.json'
+    } else if (itemType == 'courseInfo') {
+        return "res/grade" + getCookie("grade") + "/" + itemType + '.json'
+    }
 }
 
 function populateCardList(itemArgsList, creator) {
@@ -84,5 +90,9 @@ function updateUI(data, itemType) {
         case 'courseInfo': 
             updateCourseInfo(data);
             break;
+    }
+    var listGroup = document.getElementById('content-list-group')
+    if (listGroup.textContent == '') {
+        listGroup.textContent = "Bu tarihte bu sınıf/grup için gösterilecek veri bulunamadı."
     }
 }
