@@ -92,7 +92,13 @@ function updateUI(data, itemType) {
             break;
     }
     var listGroup = document.getElementById('content-list-group')
-    if (listGroup.textContent == '') {
-        listGroup.textContent = "Bu tarihte bu sınıf/grup için gösterilecek veri bulunamadı."
+    let emptyString = "Bu tarihte bu sınıf/grup için gösterilecek veri bulunamadı. Sınıf/grup  ayarı için lütfen yan çekmeceyi kullanın.";
+
+    if (listGroup.textContent.trim() == '' ) {
+        console.log("List is empty, showing empty string");
+        listGroup.textContent = emptyString;
+    } else if (itemType == 'empty') {
+        console.log("Empty view is requested, showing empty string");
+        listGroup.textContent = emptyString;
     }
 }
