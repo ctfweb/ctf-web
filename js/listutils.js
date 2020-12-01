@@ -66,8 +66,8 @@ function createCourseInfoItem(code, credit, start, end, midterms, final, makeup)
     let midtermText = midterms.length > 1 ? "<br>-" + midterms.join("<br>-") : midterms[0]
     let pMidterm = createElement('p', "ccard-title text-dark font-size: small font-weight-normal my-0", 
     '<b>Ara Sınav:</b> ' + midtermText);
-    let pFinal = createElement('p', "ccard-title text-dark font-size: small font-weight-normal my-0", '<b>Bitiş:</b> ' + final);
-    let pMakeup = createElement('p', "ccard-title text-dark font-size: small font-weight-normal my-0", '<b>Bitiş:</b> ' + makeup);
+    let pFinal = createElement('p', "ccard-title text-dark font-size: small font-weight-normal my-0", '<b>Final sınavı:</b> ' + final);
+    let pMakeup = createElement('p', "ccard-title text-dark font-size: small font-weight-normal my-0", '<b>Telafi sınavı:</b> ' + makeup);
     cardBody.appendChild(pCode);
     cardBody.appendChild(pCredit);
     cardBody.appendChild(pStart);
