@@ -135,170 +135,170 @@
                 </ul>
             </div>
         </div>
+    </div>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
 
-        <!-- jQuery CDN -->
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-        <!-- Popper.JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
-            integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-            crossorigin="anonymous"></script>
-        <!-- Bootstrap JS -->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
-            integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-            crossorigin="anonymous"></script>
+    <!-- Bootstrap Datepicker and TR locale -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="js/bootstrap-datepicker.tr.min.js" charset="UTF-8"></script>
 
-        <!-- Bootstrap Datepicker and TR locale -->
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-        <script src="js/bootstrap-datepicker.tr.min.js" charset="UTF-8"></script>
+    <script src="js/utils.js" charset="UTF-8"></script>
+    <script src="js/data.js" charset="UTF-8"></script>
+    <script src="js/listutils.js" charset="UTF-8"></script>
+    <script src="js/cookie.js" charset="UTF-8"></script>
 
-        <script src="js/utils.js" charset="UTF-8"></script>
-        <script src="js/data.js" charset="UTF-8"></script>
-        <script src="js/listutils.js" charset="UTF-8"></script>
-        <script src="js/cookie.js" charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-        <script type="text/javascript">
-            $(document).ready(function () {
+            var dataJson = null;
+            var itemType = 'schedule';
 
-                var dataJson = null;
-                var itemType = 'schedule';
+            function updateDataAndUI(json) {
+                if (typeof itemType === 'undefined') {
+                    itemType = 'courseInfo';
+                }
+                dataJson = json;
+                updateUI(dataJson, itemType);
+            }
 
-                function updateDataAndUI(json) {
-                    if (typeof itemType === 'undefined') {
-                        itemType = 'courseInfo';
+            function getJSONAndUpdate(url) {
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    success: updateDataAndUI,
+                    error: function (data) {
+                        if (data.status != 200) {
+                            // TODO: Reconsider this hack
+                            console.log("ERROR:  " + data);
+                            updateUI(dataJson, 'empty');
+                        }
                     }
-                    dataJson = json;
+                });
+            }
+
+            let today = getDateFormatted(new Date(), '.');
+            $("#datepicker").attr("value", today);
+
+            $('.datepicker').datepicker({
+                language: "tr",
+                format: "dd.mm.yyyy",
+                todayBtn: true,
+                autoclose: true,
+                todayHighlight: true,
+                defaultViewDate: today
+            }).on("changeDate", function (e) {
+                // `e` here contains the extra attributes
+                if (itemType == 'schedule' || itemType == 'labInfo') {
+                    let selectedDate = getDateFormatted(e.date, '.');
+                    $("#datepicker").attr("value", selectedDate);
                     updateUI(dataJson, itemType);
                 }
-
-                function getJSONAndUpdate(url) {
-                    $.ajax({
-                        url: url,
-                        dataType: 'json',
-                        success: updateDataAndUI,
-                        error: function (data) {
-                            if (data.status != 200) {
-                                // TODO: Reconsider this hack
-                                console.log("ERROR:  " + data);
-                                updateUI(dataJson, 'empty');
-                            }
-                        }
-                    });
-                }
-
-                let today = getDateFormatted(new Date(), '.');
-                $("#datepicker").attr("value", today);
-
-                $('.datepicker').datepicker({
-                    language: "tr",
-                    format: "dd.mm.yyyy",
-                    todayBtn: true,
-                    autoclose: true,
-                    todayHighlight: true,
-                    defaultViewDate: today
-                }).on("changeDate", function (e) {
-                    // `e` here contains the extra attributes
-                    if (itemType == 'schedule' || itemType == 'labInfo') {
-                        let selectedDate = getDateFormatted(e.date, '.');
-                        $("#datepicker").attr("value", selectedDate);
-                        updateUI(dataJson, itemType);
-                    }
-                });
-
-                $('.date-button').on('click', function () {
-                    var date = $('.datepicker').datepicker('getDate');
-                    date.setDate(date.getDate() + parseInt($(this).attr('value')));
-                    $('.datepicker').datepicker('setDate', date);
-                })
-
-
-                getJSONAndUpdate(getResourceUrl(itemType));
-
-                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Sınıf'))
-                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3"], "grade", getCookie("grade")));
-                $('#grade label').click(function () {
-                    $(this).addClass('active').siblings().removeClass('active');
-                    setCookie("grade", $(this).attr("value"));
-                    itemType = "courseInfo";
-                    let resUrl = getResourceUrl(itemType);
-                    console.log("Grade changed", resUrl, itemType);
-                    getJSONAndUpdate(resUrl);
-                });
-
-                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Amfi'))
-                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "EN1"], "class", getCookie("class")));
-                $('#class label').click(function () {
-                    $(this).addClass('active').siblings().removeClass('active');
-                    setCookie("class", $(this).attr("value"));
-                    itemType = "courseInfo";
-                    let resUrl = getResourceUrl(itemType);
-                    console.log("Class changed", resUrl, itemType);
-                    getJSONAndUpdate(resUrl);
-                });
-
-                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Grup'))
-                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["TRA", "TRB", "EN"], "customGroup", getCookie("group").replace(/TR\d/, "TR")));
-                $('#customGroup label').click(function () {
-                    $(this).addClass('active').siblings().removeClass('active');
-                    let newGroup = $(this).attr("value").replace("TR", "TR" + getCookie("grade"));
-                    console.log("New group", newGroup)
-                    setCookie("group", newGroup);
-                    $('#subGroup label').removeClass("active");
-                    $('#group label').removeClass("active");
-                    setCookie("subGroup", "");
-                    itemType = "courseInfo";
-                    let resUrl = getResourceUrl(itemType);
-                    console.log("Group changed", resUrl, itemType);
-                    getJSONAndUpdate(resUrl);
-                });
-                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3", "4"], "group", getCookie("group")));
-                $('#group label').click(function () {
-                    $(this).addClass('active').siblings().removeClass('active');
-                    $('#customGroup label').removeClass("active");
-                    setCookie("group", $(this).attr("value"));
-                    itemType = "courseInfo";
-                    let resUrl = getResourceUrl(itemType);
-                    console.log("Group changed", resUrl, itemType);
-                    getJSONAndUpdate(resUrl);
-                });
-
-                document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Alt Grup'))
-                document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["A", "B"], "subGroup", getCookie("subGroup")));
-                $('#subGroup label').click(function () {
-                    $(this).addClass('active').siblings().removeClass('active');
-                    $('#customGroup label').removeClass("active");
-                    setCookie("subGroup", $(this).attr("value"));
-                    itemType = "courseInfo";
-                    let resUrl = getResourceUrl(itemType);
-                    console.log("Subgroup changed", resUrl, itemType);
-                    getJSONAndUpdate(resUrl);
-                });
-
-
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar').toggleClass('active');
-                    $(this).toggleClass('active');
-                });
-
-
-
-                $("#sidebar ul li div").on('click', function () {
-                    let clickedType = $(this).attr('value');
-                    if (itemType != clickedType) {
-                        itemType = clickedType;
-                        let resUrl = getResourceUrl(itemType);
-                        getJSONAndUpdate(resUrl);
-                        if (window.innerWidth < 768) {
-                            $('#sidebar').toggleClass('active');
-                            $('#sidebarCollapse').toggleClass('active');
-                        }
-                    }
-                })
             });
 
+            $('.date-button').on('click', function () {
+                var date = $('.datepicker').datepicker('getDate');
+                date.setDate(date.getDate() + parseInt($(this).attr('value')));
+                $('.datepicker').datepicker('setDate', date);
+            })
+
+
+            getJSONAndUpdate(getResourceUrl(itemType));
+
+            document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Sınıf'))
+            document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3"], "grade", getCookie("grade")));
+            $('#grade label').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                setCookie("grade", $(this).attr("value"));
+                itemType = "courseInfo";
+                let resUrl = getResourceUrl(itemType);
+                console.log("Grade changed", resUrl, itemType);
+                getJSONAndUpdate(resUrl);
+            });
+
+            document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Amfi'))
+            document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "EN1"], "class", getCookie("class")));
+            $('#class label').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                setCookie("class", $(this).attr("value"));
+                itemType = "courseInfo";
+                let resUrl = getResourceUrl(itemType);
+                console.log("Class changed", resUrl, itemType);
+                getJSONAndUpdate(resUrl);
+            });
+
+            document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Grup'))
+            document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["TRA", "TRB", "EN"], "customGroup", getCookie("group").replace(/TR\d/, "TR")));
+            $('#customGroup label').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                let newGroup = $(this).attr("value").replace("TR", "TR" + getCookie("grade"));
+                console.log("New group", newGroup)
+                setCookie("group", newGroup);
+                $('#subGroup label').removeClass("active");
+                $('#group label').removeClass("active");
+                setCookie("subGroup", "");
+                itemType = "courseInfo";
+                let resUrl = getResourceUrl(itemType);
+                console.log("Group changed", resUrl, itemType);
+                getJSONAndUpdate(resUrl);
+            });
+            document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["1", "2", "3", "4"], "group", getCookie("group")));
+            $('#group label').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                $('#customGroup label').removeClass("active");
+                setCookie("group", $(this).attr("value"));
+                itemType = "courseInfo";
+                let resUrl = getResourceUrl(itemType);
+                console.log("Group changed", resUrl, itemType);
+                getJSONAndUpdate(resUrl);
+            });
+
+            document.getElementById("settingsContainer").appendChild(createElement("div", '', 'Alt Grup'))
+            document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["A", "B"], "subGroup", getCookie("subGroup")));
+            $('#subGroup label').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                $('#customGroup label').removeClass("active");
+                setCookie("subGroup", $(this).attr("value"));
+                itemType = "courseInfo";
+                let resUrl = getResourceUrl(itemType);
+                console.log("Subgroup changed", resUrl, itemType);
+                getJSONAndUpdate(resUrl);
+            });
+
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+
+
+
+            $("#sidebar ul li div").on('click', function () {
+                let clickedType = $(this).attr('value');
+                if (itemType != clickedType) {
+                    itemType = clickedType;
+                    let resUrl = getResourceUrl(itemType);
+                    getJSONAndUpdate(resUrl);
+                    if (window.innerWidth < 768) {
+                        $('#sidebar').toggleClass('active');
+                        $('#sidebarCollapse').toggleClass('active');
+                    }
+                }
+            })
+        });
+
         // TODO: Add click outside sidebar to collapse
-        </script>
+    </script>
 </body>
 
 </html>
