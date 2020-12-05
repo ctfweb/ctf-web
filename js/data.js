@@ -92,13 +92,17 @@ function updateUI(data, itemType) {
             break;
     }
     var listGroup = document.getElementById('content-list-group')
-    let emptyString = "Bu tarihte bu sınıf/grup için gösterilecek veri bulunamadı. Sınıf/grup  ayarı için lütfen yan çekmeceyi kullanın.";
+    let emptyString = "Bu tarihte bu sınıf/grup için gösterilecek veri bulunamadı.\
+    Sınıf/grup  ayarı için lütfen yan çekmeceyi kullanın.\n\
+    \nSınıf : " + getCookie("grade") + 
+    "\nAmfi : " + getCookie("class") + 
+    "\nGrup : " + getCookie("group") + getCookie("subGroup");
 
     if (listGroup.textContent.trim() == '' ) {
         console.log("List is empty, showing empty string");
-        listGroup.textContent = emptyString;
+        listGroup.innerText = emptyString;
     } else if (itemType == 'empty') {
         console.log("Empty view is requested, showing empty string");
-        listGroup.textContent = emptyString;
+        listGroup.innerText = emptyString;
     }
 }
