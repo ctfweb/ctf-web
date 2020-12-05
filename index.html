@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+
     <title>CTF Web</title>
     <link rel="apple-touch-icon" sizes="57x57" href="img/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="img/apple-icon-60x60.png">
@@ -16,7 +16,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="img/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="img/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
@@ -55,10 +55,6 @@
             <div id="dismiss" hidden="true">
                 <i class="fas fa-arrow-left"></i>
             </div>
-
-            <!-- <div class="sidebar-header">
-                <h3>Side Bar Header</h3>
-            </div> -->
 
             <ul class="list-unstyled components">
                 <li>
@@ -126,7 +122,7 @@
                 <button type="button" class="btn my-1 date-button" value="-1">
                     <i class="fas fa-arrow-left"></i>
                 </button>
-                
+
                 <button type="button" class="btn m-1 date-button" value="1">
                     <i class="fas fa-arrow-right"></i>
                 </button>
@@ -181,10 +177,10 @@
                         url: url,
                         dataType: 'json',
                         success: updateDataAndUI,
-                        error: function( data ) {
+                        error: function (data) {
                             if (data.status != 200) {
                                 // TODO: Reconsider this hack
-                                console.log( "ERROR:  " + data );
+                                console.log("ERROR:  " + data);
                                 updateUI(dataJson, 'empty');
                             }
                         }
