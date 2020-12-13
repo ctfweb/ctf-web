@@ -65,7 +65,7 @@ function updateLabInfoForDate(data) {
     selectedIndices = [...Array(data['date'].length).keys()];
     selectedVals = selectJsonData(data, selectedIndices, ['date', 'time','name']);
     scrollIndex = 0;
-    while (compareDateStrings(selectedVals[scrollIndex][0], date)) {
+    while (scrollIndex < selectedVals.length && compareDateStrings(selectedVals[scrollIndex][0], date)) {
         scrollIndex += 1;
     }
     populateCardList(selectedVals, createLabItem);
