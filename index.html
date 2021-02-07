@@ -241,7 +241,7 @@
             document.getElementById("settingsContainer").appendChild(createToggleButtonGroup(["TRA", "TRB", "EN"], "customGroup", getCookie("group").replace(/TR\d/, "TR")));
             $('#customGroup label').click(function () {
                 $(this).addClass('active').siblings().removeClass('active');
-                let newGroup = $(this).attr("value").replace("TR", "TR" + getCookie("grade"));
+                let newGroup = $(this).attr("value");
                 console.log("New group", newGroup)
                 setCookie("group", newGroup);
                 $('#subGroup label').removeClass("active");

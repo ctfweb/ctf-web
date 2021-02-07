@@ -24,7 +24,7 @@ function getResourceUrl(itemType) {
     if (itemType == 'schedule') {
         return "res/grade" + getCookie("grade") + "/" + itemType + getCookie("class") +'.json'
     } else if (itemType == 'labInfo') {
-        return "res/grade" + getCookie("grade") + "/" + itemType + getCookie("group") + getCookie("subGroup") + '.json'
+        return "res/grade" + getCookie("grade") + "/" + itemType + getCookie("group").replace("TR", "TR" + getCookie("grade")) + getCookie("subGroup") + '.json'
     } else if (itemType == 'courseInfo') {
         return "res/grade" + getCookie("grade") + "/" + itemType + '.json'
     }
