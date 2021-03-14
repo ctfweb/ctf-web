@@ -25,10 +25,10 @@
     <meta name="msapplication-TileColor" content="#000000">
     <meta name="msapplication-TileImage" content="img/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    
+
     <!-- counter.dev integration -->
     <script>if (!sessionStorage.getItem("_swa") && document.referrer.indexOf(location.protocol + "//" + location.host) !== 0) { fetch("https://counter.dev/track?" + new URLSearchParams({ referrer: document.referrer, screen: screen.width + "x" + screen.height, user: "ctfweb", utcoffset: "3" })) }; sessionStorage.setItem("_swa", "1");</script>
-    
+
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
         integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -131,7 +131,9 @@
                 </button>
             </div>
 
-
+            <div id='notification-area' class="card"
+                style="margin-bottom: 16px; text-align: center; font-size: x-large;">
+            </div>
 
             <div id='list-container'>
                 <ul class="list-group" id="content-list-group">
@@ -189,6 +191,20 @@
                     }
                 });
             }
+
+            function showNotification() {
+                var message = "";
+                let d = new Date();
+                if (d.getDate() == 14 && d.getMonth() == 2) {
+                    message = "&#129658;Tıp Bayramı'nız kutlu olsun!&#129395";
+                }
+                if (message == "") {
+                    $("#notification-area").hide();
+                } else {
+                    $("#notification-area").html(message);
+                }
+            }
+            showNotification();
 
             let today = getDateFormatted(new Date(), '.');
             $("#datepicker").attr("value", today);
